@@ -1,6 +1,16 @@
-[build-backend]
+[build-system]
+requires = ["setuptools >= 77.0.3"]
+build-backend = "setuptools.build_meta"
 
-[]
+[project]
+name = "get-files-teacher-aint-providing"
+version = "2026.10.28"
+dependencies = []
+authors = [{name="JZ", email="xyj2068@gmail.com"}]
+maintainers = [{name="JZ", email="xyj2068@gmail.com"}]
+description = "get files that teacher ain't providing"
+readme = "README.md"
 
-[]
-
+[project.optional-dependencies]
+pytest = ["pytest"] 
+all = ["pytest"]
