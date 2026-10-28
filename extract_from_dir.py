@@ -6,7 +6,10 @@ from datetime import datetime
 logger = logging.getLogger(__name__)
 suffixes = ["pptx", "ppt", "pdf", "doc", "docx"]
 targets = []
-DEST_DIR = r"D:/backup_files"
+DEST_DIR = Path(r"D:/backup_files")
+DEST_DIR.mkdir(parents=True, exist_ok=True)
+
+
 
 def extractor(p: Path):
     if(not p.is_dir()):
@@ -22,6 +25,7 @@ def extractor(p: Path):
     for target in targets:
         if(target.exists() and target.is_file()):
             dst = DEST_DIR + target.name
-            shutil.copy2(target, dst)
-            log_time = str(datetime.now())
-            logger.info(f"复制了一个文件， {log_time}")
+            if(not dst.exists()):
+                shutil.copy2(target, dst)
+                log_time = str(datetime.now())
+                logger.info(f"复制了一个文件， {log_time}")
