@@ -4,14 +4,14 @@ import shutil
 from datetime import datetime
 
 logger = logging.getLogger(__name__)
-suffixes = ["pptx", "ppt", "pdf", "doc", "docx"]
-targets = []
+suffixes: str = ["pptx", "ppt", "pdf", "doc", "docx"]
+targets: list[Path] = []
 DEST_DIR = Path(r"D:/backup_files")
 DEST_DIR.mkdir(parents=True, exist_ok=True)
 
 
 
-def extractor(p: Path):
+def extractor(p: Path) -> None:
     if(not p.is_dir()):
         raise TypeError("p is not a directory")
 
@@ -24,7 +24,7 @@ def extractor(p: Path):
     #这里面是目标文件，rlogb递归搜索出来的
     for target in targets:
         if(target.exists() and target.is_file()):
-            dst = DEST_DIR + target.name
+            dst: Path = DEST_DIR + target.name
             if(not dst.exists()):
                 shutil.copy2(target, dst)
                 log_time = str(datetime.now())
