@@ -2,12 +2,10 @@ import logging
 from pathlib import Path
 import shutil
 from datetime import datetime
+from configs import file_suffixes, DEST_DIR
 
 logger = logging.getLogger(__name__)
-suffixes: str = ["pptx", "ppt", "pdf", "doc", "docx"]
 targets: list[Path] = []
-DEST_DIR = Path(r"D:/backup_files")
-DEST_DIR.mkdir(parents=True, exist_ok=True)
 
 
 
@@ -16,7 +14,7 @@ def extractor(p: Path) -> None:
         raise TypeError("p is not a directory")
 
     #把所有目标文件倒到目标列表里面
-    for suffix in suffixes:
+    for suffix in file_suffixes:
         for target_file in p.rglob(f"**/*.{suffix}"):
             if(target_file.is_file()):
                 targets.append(target_file)
