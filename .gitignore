@@ -1,0 +1,12 @@
+#  忽略隐藏文件
+.*
+
+# !.*/  不忽略隐藏目录
+
+# 不忽略.gitignore
+!.gitignore
+
+try*
+
+gsearch*
+gseach*

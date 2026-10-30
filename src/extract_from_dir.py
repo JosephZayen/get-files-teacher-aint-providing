@@ -4,12 +4,14 @@ import shutil
 from datetime import datetime
 from configs import file_suffixes, DEST_DIR
 
-logger = logging.getLogger(__name__)
-targets: list[Path] = []
 
 
 
 def extractor(p: Path) -> None:
+    logger = logging.getLogger(__name__)
+    # 存储目标路径的列表
+    targets: list[Path] = []
+
     if(not p.is_dir()):
         raise TypeError("p is not a directory")
 

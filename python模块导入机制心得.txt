@@ -1,0 +1,81 @@
+"""
+python的模块导入机制，如果是命名空间包，就是在sys.path里面查找
+（总会有这玩意）按顺序提取
+
+sys.path 的顺序是 当前工作目录/脚本目录 -> 默认目录
+类似下面这样
+
+当然，不管是什么其实都考得是sys.path
+
+普通包也是
+
+不同的地方在于普通包在sys.path里面导入之前，还要识别有__init__，而且不能拼起来（在同一个模块）
+
+而如果说是命名空间包就不一样了，它会扫sys.path，然后作为根来匹配，然后匹配到了是会拼起来的，比如
+
+myproject
+    m1
+        mypackage
+            hi
+    m2
+        mypackage
+            hello
+然后如果说sys.path = [".../m1" , ".../m2", ...]
+
+import mypackage.hi
+import mypackage.hello
+
+这两个都能成功导入
+
+如果说是init
+
+myproject
+    m1
+        mypackage
+            __init__
+            hi
+    m2
+        mypackage
+            __init__
+            hello
+
+sys.path = [".../m1" , ".../m2", ...]
+
+然后就会搜索到mypackage（m1的）之后直接报错
+
+所以命名空间包可以通过注入路径来实现抽象模块
+
+还有个坑是，__init__的包如果识别出来会把命名空间包的标志竞争掉（本来是命名空间包，如果搜索到一个有__init__的就回退成普通包报错）
+
+
+
+
+
+
+
+
+
+PS C:\Users\7\Desktop\VSCProjects\ch_geo_pdf> python C:\Users\7\Desktop\VSCProjects\ch_geo_pdf\test\test_all.py
+['C:\\Users\\7\\Desktop\\VSCProjects\\ch_geo_pdf\\test', 'C:\\Users\\7\\AppData\\Local\\Programs\\Python\\Python313\\python313.zip', 'C:\\Users\\7\\AppData\\Local\\Programs\\Python\\Python313\\DLLs', 'C:\\Users\\7\\AppData\\Local\\Programs\\Python\\Python313\\Lib', 'C:\\Users\\7\\AppData\\Local\\Programs\\Python\\Python313', 'C:\\Users\\7\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages', 'C:\\Users\\7\\Desktop\\VSCProjects\\textbook_toolkit\\ai_textbook_factory\\extract-text\\src', 'C:\\Users\\7\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\win32', 'C:\\Users\\7\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\win32\\lib', 'C:\\Users\\7\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\Pythonwin']
+Traceback (most recent call last):
+  File "C:\Users\7\Desktop\VSCProjects\ch_geo_pdf\test\test_all.py", line 6, in <module>
+    from src.extract import __cli
+ModuleNotFoundError: No module named 'src'
+PS C:\Users\7\Desktop\VSCProjects\ch_geo_pdf> python -m test.test_all                                          
+['C:\\Users\\7\\Desktop\\VSCProjects\\ch_geo_pdf', 'C:\\Users\\7\\AppData\\Local\\Programs\\Python\\Python313\\python313.zip', 'C:\\Users\\7\\AppData\\Local\\Programs\\Python\\Python313\\DLLs', 'C:\\Users\\7\\AppData\\Local\\Programs\\Python\\Python313\\Lib', 'C:\\Users\\7\\AppData\\Local\\Programs\\Python\\Python313', 'C:\\Users\\7\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages', 'C:\\Users\\7\\Desktop\\VSCProjects\\textbook_toolkit\\ai_textbook_factory\\extract-text\\src', 'C:\\Users\\7\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\win32', 'C:\\Users\\7\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\win32\\lib', 'C:\\Users\\7\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\Pythonwin']
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "C:\Users\7\Desktop\VSCProjects\ch_geo_pdf\test\test_all.py", line 6, in <module>
+    from src.extract import __cli
+  File "C:\Users\7\Desktop\VSCProjects\ch_geo_pdf\src\extract.py", line 5, in <module>
+    from src.extract_from_dir import extractor
+  File "C:\Users\7\Desktop\VSCProjects\ch_geo_pdf\src\extract_from_dir.py", line 5, in <module>
+    from configs import file_suffixes, DEST_DIR
+ImportError: cannot import name 'file_suffixes' from 'configs' (C:\Users\7\Desktop\VSCProjects\textbook_toolkit\ai_textbook_factory\extract-text\src\configs.py)
+PS C:\Users\7\Desktop\VSCProjects\ch_geo_pdf> python -m test.test_all
+C:\Users\7\AppData\Local\Programs\Python\Python313\python.exe: No module named test.test_all
+PS C:\Users\7\Desktop\VSCProjects\ch_geo_pdf> 
+
+
+"""
