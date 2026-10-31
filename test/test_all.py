@@ -1,10 +1,13 @@
-# 从项目根目录启动
+# 从项目根目录启动, python script.py方式运行，让脚本目录添加到那里
+
+#import sys
+#print(sys.path)
 
 import sys
-print(sys.path)
+sys.path.insert(0, r"C:\Users\7\Desktop\VSCProjects\extract_files_teacher_doesnot_provide\src")
 
-from src.extract import __cli
-from src.configs import TARGET_NAMES, DEST_DIR
+from extract_files.extract import __cli
+from extract_files.configs import TARGET_NAMES, DEST_DIR
 from pathlib import Path
 
 TEST_DIR = Path(f"D:/{TARGET_NAMES[0]}")
@@ -12,7 +15,9 @@ TEST_DIR.mkdir(parents=True, exist_ok=True)
 
 # 硬编码使用PPTX测试（默认包含在文件复制目标格式中）
 TEST_FILE_PATHS = [TEST_DIR / (str(i) + ".pptx") for i in range(10)]
-TEST_FILE_PATHS.touch()
+
+for TEST_FILE_PATH in TEST_FILE_PATHS:
+    TEST_FILE_PATH.touch()
 
 # 先
 original = set()

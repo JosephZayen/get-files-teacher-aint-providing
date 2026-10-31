@@ -2,7 +2,7 @@ import logging
 from pathlib import Path
 import shutil
 from datetime import datetime
-from configs import file_suffixes, DEST_DIR
+from .configs import file_suffixes, DEST_DIR
 
 
 
@@ -24,8 +24,8 @@ def extractor(p: Path) -> None:
     #这里面是目标文件，rlogb递归搜索出来的
     for target in targets:
         if(target.exists() and target.is_file()):
-            dst: Path = DEST_DIR + target.name
+            dst: Path = DEST_DIR / target.name
             if(not dst.exists()):
                 shutil.copy2(target, dst)
                 log_time = str(datetime.now())
-                logger.info(f"复制了一个文件， {log_time}")
+                logger.info(f"已复制一个文件，LOG_TIME: {log_time}")

@@ -6,11 +6,16 @@ build-backend = "setuptools.build_meta"
 name = "get-files-teacher-aint-providing"
 version = "2026.10.28"
 dependencies = []
-authors = [{name="JZ", email=""}]
-maintainers = [{name="JZ", email=""}]
 description = "get files that teacher ain't providing"
 readme = "README.md"
+
 
 [project.optional-dependencies]
 pytest = ["pytest"]
 all = ["pytest"]
+
+[project.scripts]
+extract-files = "extract_files/extract:__cli "
+
+[tool.setuptools.package.find]
+where = ["src"]

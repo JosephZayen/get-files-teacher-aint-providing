@@ -2,15 +2,15 @@ import logging
 from pathlib import Path
 import time
 import datetime
-from src.extract_from_dir import extractor
-from src.configs import TARGET_NAMES, drive_prefixes
+from .extract_from_dir import extractor
+from .configs import TARGET_NAMES, drive_prefixes
 import sys
 
 
 
 def __cli():
     logger = logging.getLogger(__name__)
-    logging.basicConfig(filename="ch_geo_extractor.log", level = logging.INFO)
+    logging.basicConfig(filename="ch_geo_extractor.log", level = logging.INFO, encoding="utf-8")
 
     # 初始化驱动盘符名称与路径
     drive_letters: list[str] = [prefix + TARGET_NAME for prefix in drive_prefixes for TARGET_NAME in TARGET_NAMES]
@@ -28,14 +28,13 @@ def __cli():
 
     # 轮询，搜索出存在文件夹后提取所有特定后缀文件
     while(target_path is None):
+        log_date = datetime.datetime.now()
+        log_time = str(log_date)
         target_path = search(drive_paths)
         if(target_path is not None):
             extractor(target_path)
-            logger.info(f"完成了， {log_time}")
+            logger.info(f"成功完成搜索，LOG_TIME: {log_time}")
             sys.exit(0)
-        log_date = datetime.datetime.now()
-        log_time = str(log_date)
-        logger.info(f"搜索完成一轮，{log_time}")
         time.sleep(60)
 
 

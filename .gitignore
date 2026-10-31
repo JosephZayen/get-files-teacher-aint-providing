@@ -10,3 +10,8 @@ try*
 
 gsearch*
 gseach*
+
+*__pycache__*
+
+#git ls-files | select-String ".*__pycache__.*" | forEach-Object {git rm --cached $_}
+#这玩意移除很方便
