@@ -15,7 +15,7 @@ pytest = ["pytest"]
 all = ["pytest"]
 
 [project.scripts]
-extract-files = "extract_files/extract:__cli "
+extract-files = "extract_files.extract:__cli"
 
-[tool.setuptools.package.find]
+[tool.setuptools.packages.find]
 where = ["src"]
